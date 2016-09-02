@@ -1,0 +1,26 @@
+
+R1 = [3,4,-1,1,1,-1,0.5,0.5,-0.75,-0.75]';
+R2 = [3,4,-0.2,0.2,.2,-.2,0.5, 0.5, 0,0]';
+gm = [R1,R2];
+sf = 'R1-R2';
+ns = char('R1','R2');
+ns = ns';
+g = decsg(gm,sf,ns);
+figure;
+pdegplot(g);
+model = createpde;
+geometryFromEdges(model,g);
+mesh = generateMesh(model);
+pdeplot(model);
+
+%compute viewfactors of all mesh triangles from coordinates above
+for i=1:1%length(mesh.Elements)%get coordinates of nodes attached to each element
+    elem1 = mesh.Elements(:,i);
+    nodeCoord1 = mesh.Nodes(:,elem1(1));
+    nodeCoord2 = mesh.Nodes(:,elem1(2));
+    nodeCoord3 = mesh.Nodes(:,elem1(3));
+    [vfactor12,vfactor21,area1,area2]=viewfactor([[0,0,0];[1,0,0];[0,1,0]],[[0,0,1];[2,0,1];[0,2,1]],6)
+end
+    
+
+%[vfactor12,vfactor21,area1,area2]=viewfactor([[0,0,0];[1,0,0];[0,1,0]],[[0,0,1];[2,0,1];[0,2,1]],6)
